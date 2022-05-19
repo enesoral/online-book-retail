@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: test
   mongodb:
     embedded:
       version: 3.5.5

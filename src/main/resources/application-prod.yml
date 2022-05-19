@@ -1,0 +1,9 @@
+spring:
+  config:
+    activate:
+      on-profile: production
+  data:
+    mongodb:
+      database: bookRetailDB
+      host: mongodb
+      auto-index-creation: true
