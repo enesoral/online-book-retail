@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -22,7 +21,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test")
 class BookServiceTest {
 
     public static final String ID = ObjectId.get().toString();
@@ -116,8 +114,8 @@ class BookServiceTest {
         lenient().when(bookRepository.findById(ID))
                 .thenReturn(Optional.of(bookResponse));
 
-        verify(bookRepository, times(1)).findById(ID);
         assertThrows(BookNotFoundException.class,
                 () -> bookService.updateStock(invalidStockUpdateCommand));
+        verify(bookRepository, times(1)).findById(UNRECOGNIZED_ID);
     }
 }
