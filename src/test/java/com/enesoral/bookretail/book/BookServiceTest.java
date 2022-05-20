@@ -1,5 +1,6 @@
 package com.enesoral.bookretail.book;
 
+import com.enesoral.bookretail.common.exception.BookNotFoundException;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,6 +26,7 @@ import static org.mockito.Mockito.verify;
 class BookServiceTest {
 
     public static final String ID = ObjectId.get().toString();
+    public static final String UNRECOGNIZED_ID = ObjectId.get().toString();
     public static final long STOCK = 15;
     public static final long NEW_STOCK = 30;
     public static final String ISBN = "9783161484100";
@@ -33,7 +36,8 @@ class BookServiceTest {
     public static Book bookResponse;
     public static Book bookRequest;
     public static BookCommand bookCommand;
-    public static StockUpdateCommand stockUpdateCommand;
+    public static StockUpdateCommand validStockUpdateCommand;
+    public static StockUpdateCommand invalidStockUpdateCommand;
 
     @Spy
     private BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
@@ -63,15 +67,19 @@ class BookServiceTest {
 
         bookCommand = bookMapper.toCommand(bookResponse);
 
-        stockUpdateCommand = StockUpdateCommand.builder()
+        validStockUpdateCommand = StockUpdateCommand.builder()
                 .bookId(ID)
+                .newStock(NEW_STOCK)
+                .build();
+
+        invalidStockUpdateCommand = StockUpdateCommand.builder()
+                .bookId(UNRECOGNIZED_ID)
                 .newStock(NEW_STOCK)
                 .build();
     }
 
     @Test
     void testValidBookSave() {
-        
         lenient().when(bookRepository.save(bookRequest))
                 .thenReturn(bookResponse);
 
@@ -88,11 +96,11 @@ class BookServiceTest {
     }
 
     @Test
-    void updateStock() {
+    void testValidUpdateStock() {
         lenient().when(bookRepository.findById(ID))
                 .thenReturn(Optional.of(bookResponse));
 
-        final BookCommand bookCommand = bookService.updateStock(stockUpdateCommand);
+        final BookCommand bookCommand = bookService.updateStock(validStockUpdateCommand);
 
         verify(bookRepository, times(1)).findById(ID);
         assertThat(bookCommand)
@@ -100,6 +108,16 @@ class BookServiceTest {
                 .matches(book -> book.getIsbn().equals(bookResponse.getIsbn()))
                 .matches(book -> book.getName().equals(bookResponse.getName()))
                 .matches(book -> book.getPrice().equals(bookResponse.getPrice()))
-                .matches(book -> book.getStock().equals(stockUpdateCommand.getNewStock()));
+                .matches(book -> book.getStock().equals(validStockUpdateCommand.getNewStock()));
+    }
+
+    @Test
+    void testInvalidUpdateStock() {
+        lenient().when(bookRepository.findById(ID))
+                .thenReturn(Optional.of(bookResponse));
+
+        verify(bookRepository, times(1)).findById(ID);
+        assertThrows(BookNotFoundException.class,
+                () -> bookService.updateStock(invalidStockUpdateCommand));
     }
 }
