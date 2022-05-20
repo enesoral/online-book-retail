@@ -1,5 +1,7 @@
 package com.enesoral.bookretail.book;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -11,6 +13,8 @@ import java.math.BigDecimal;
 @Document
 @Getter
 @Setter
+@EqualsAndHashCode
+@Builder
 class Book {
 
     @Id
