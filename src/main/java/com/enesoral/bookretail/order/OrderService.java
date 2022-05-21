@@ -1,0 +1,39 @@
+package com.enesoral.bookretail.order;
+
+import com.enesoral.bookretail.book.BookService;
+import com.enesoral.bookretail.common.exception.UserNotFoundException;
+import com.enesoral.bookretail.user.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+
+@Service
+@RequiredArgsConstructor
+class OrderService {
+
+    private final UserService userService;
+    private final BookService bookService;
+    private final OrderMapper orderMapper;
+    private final OrderRepository orderRepository;
+
+    @Transactional
+    public OrderCommand processOrder(OrderRequest orderRequest) {
+        if (!userService.isUserExist(orderRequest.getUserId())) {
+            throw new UserNotFoundException(orderRequest.getUserId());
+        }
+
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (BookAndQuantity bookAndQuantity : orderRequest.getBooksAndQuantities()) {
+            final BigDecimal price = bookService.getTotalPriceAndReduceStock(bookAndQuantity);
+            totalPrice = totalPrice.add(price);
+        }
+
+        return toCommand(orderRepository.save(Order.generate(orderRequest, totalPrice)));
+    }
+
+    private OrderCommand toCommand(Order order) {
+        return orderMapper.toCommand(order);
+    }
+}
