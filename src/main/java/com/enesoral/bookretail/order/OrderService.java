@@ -5,6 +5,8 @@ import com.enesoral.bookretail.common.exception.OrderNotFoundException;
 import com.enesoral.bookretail.common.exception.UserNotFoundException;
 import com.enesoral.bookretail.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-class OrderService {
+public class OrderService {
 
     private final UserService userService;
     private final BookService bookService;
@@ -39,6 +41,10 @@ class OrderService {
         }
 
         return toCommand(orderRepository.save(Order.generate(orderRequest, totalPrice)));
+    }
+
+    public Page<OrderCommand> getAllByUserId(String userId, int page) {
+        return orderRepository.findAllByUserId(userId, PageRequest.of(page, 10));
     }
 
     private OrderCommand toCommand(Order order) {
