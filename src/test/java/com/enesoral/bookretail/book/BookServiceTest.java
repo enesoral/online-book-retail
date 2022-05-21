@@ -3,7 +3,6 @@ package com.enesoral.bookretail.book;
 import com.enesoral.bookretail.common.exception.BookNotFoundException;
 import com.enesoral.bookretail.common.exception.InsufficientStockException;
 import com.enesoral.bookretail.order.BookAndQuantity;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +15,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.enesoral.bookretail.book.BookTestHelper.BOOK_NAME;
+import static com.enesoral.bookretail.book.BookTestHelper.CALCULATED_PRICE;
+import static com.enesoral.bookretail.book.BookTestHelper.ID;
+import static com.enesoral.bookretail.book.BookTestHelper.INSUFFICIENT_QUANTITY;
+import static com.enesoral.bookretail.book.BookTestHelper.ISBN;
+import static com.enesoral.bookretail.book.BookTestHelper.NEW_STOCK;
+import static com.enesoral.bookretail.book.BookTestHelper.NOT_SAVED_ID;
+import static com.enesoral.bookretail.book.BookTestHelper.PRICE;
+import static com.enesoral.bookretail.book.BookTestHelper.STOCK;
+import static com.enesoral.bookretail.book.BookTestHelper.SUFFICIENT_QUANTITY;
+import static com.enesoral.bookretail.book.BookTestHelper.UNRECOGNIZED_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,18 +35,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
-
-    public static final String ID = ObjectId.get().toString();
-    public static final String UNRECOGNIZED_ID = ObjectId.get().toString();
-    public static final long STOCK = 15;
-    public static final long NEW_STOCK = 30;
-    public static final String ISBN = "9783161484100";
-    public static final BigDecimal PRICE = BigDecimal.valueOf(14.5);
-    public static final String BOOK_NAME = "Gulliver's Travels";
-    public static final long SUFFICIENT_QUANTITY = 10;
-    public static final long INSUFFICIENT_QUANTITY = 20;
-    public static final BigDecimal CALCULATED_PRICE = PRICE.multiply(BigDecimal.valueOf(SUFFICIENT_QUANTITY));
-    public static final String NOT_SAVED_ID = ObjectId.get().toString();
 
     public static Book bookResponse;
     public static Book bookRequest;

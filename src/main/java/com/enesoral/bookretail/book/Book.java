@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Setter
 @EqualsAndHashCode
 @Builder
-class Book {
+public class Book {
 
     @Id
     private String id;

@@ -1,7 +1,6 @@
 package com.enesoral.bookretail.user;
 
 import com.enesoral.bookretail.common.exception.EmailAlreadyTakenException;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,20 +10,18 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.enesoral.bookretail.user.UserTestHelper.EMAIL;
+import static com.enesoral.bookretail.user.UserTestHelper.FULL_NAME;
+import static com.enesoral.bookretail.user.UserTestHelper.ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-
 class UserServiceTest {
-
-    public static final String ID = ObjectId.get().toString();
-    public static final String FULL_NAME = "Enes Oral";
-    public static final String EMAIL = "enesoral@gmail.com";
 
     public static User userResponse;
     public static User userRequest;
