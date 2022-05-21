@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 interface OrderRepository extends MongoRepository<Order, String> {
-    Page<OrderCommand> findAllByUserId(String userId, Pageable pageable);
+
+    Page<UserOrderCommand> findAllByUserId(String userId, Pageable pageable);
 }

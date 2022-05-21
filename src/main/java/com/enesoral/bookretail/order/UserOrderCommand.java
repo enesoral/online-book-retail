@@ -9,9 +9,9 @@ import java.util.List;
 
 @Getter
 @Setter
-class OrderCommand {
+public class UserOrderCommand {
 
-    private String userId;
+    private String id;
 
     private List<BookAndQuantity> booksAndQuantities;
 

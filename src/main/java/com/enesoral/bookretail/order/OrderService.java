@@ -43,7 +43,7 @@ public class OrderService {
         return toCommand(orderRepository.save(Order.generate(orderRequest, totalPrice)));
     }
 
-    public Page<OrderCommand> getAllByUserId(String userId, int page) {
+    public Page<UserOrderCommand> getAllByUserId(String userId, int page) {
         return orderRepository.findAllByUserId(userId, PageRequest.of(page, 10));
     }
 
