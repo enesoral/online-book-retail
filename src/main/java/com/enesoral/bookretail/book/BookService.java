@@ -2,6 +2,7 @@ package com.enesoral.bookretail.book;
 
 import com.enesoral.bookretail.common.exception.BookNotFoundException;
 import com.enesoral.bookretail.common.exception.InsufficientStockException;
+import com.enesoral.bookretail.order.BookAndQuantity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Retryable;

@@ -1,4 +1,4 @@
-package com.enesoral.bookretail.book;
+package com.enesoral.bookretail.order;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

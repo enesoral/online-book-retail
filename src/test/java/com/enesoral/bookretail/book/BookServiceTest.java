@@ -2,6 +2,7 @@ package com.enesoral.bookretail.book;
 
 import com.enesoral.bookretail.common.exception.BookNotFoundException;
 import com.enesoral.bookretail.common.exception.InsufficientStockException;
+import com.enesoral.bookretail.order.BookAndQuantity;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,6 +143,8 @@ class BookServiceTest {
 
         final BigDecimal totalPrice = bookService.getTotalPriceAndReduceStock(bookAndQuantity);
 
+        verify(bookRepository, times(1)).findById(savedBook.getId());
+        verify(bookRepository, times(1)).save(savedBook);
         assertEquals(CALCULATED_PRICE, totalPrice);
     }
 
@@ -153,6 +156,7 @@ class BookServiceTest {
                 .build();
 
         assertThrows(BookNotFoundException.class, () -> bookService.getTotalPriceAndReduceStock(bookAndQuantity));
+        verify(bookRepository, times(1)).findById(NOT_SAVED_ID);
     }
 
     @Test

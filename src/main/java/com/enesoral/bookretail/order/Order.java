@@ -1,6 +1,5 @@
 package com.enesoral.bookretail.order;
 
-import com.enesoral.bookretail.book.BookAndQuantity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
