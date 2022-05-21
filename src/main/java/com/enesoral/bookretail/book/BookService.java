@@ -1,19 +1,34 @@
 package com.enesoral.bookretail.book;
 
 import com.enesoral.bookretail.common.exception.BookNotFoundException;
+import com.enesoral.bookretail.common.exception.InsufficientStockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-class BookService {
+public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+
+    @Transactional
+    public BigDecimal getTotalPriceAndReduceStock(@Valid BookAndQuantity bookAndQuantity) {
+        final Optional<Book> bookById = bookRepository.findById(bookAndQuantity.getBookId());
+        return bookById.map(book -> {
+                    tryReduceStock(book, bookAndQuantity.getQuantity());
+                    return book.getPrice().multiply(BigDecimal.valueOf(bookAndQuantity.getQuantity()));
+                })
+                .orElseThrow(() -> new BookNotFoundException(
+                        String.format("Book not found with id: %s", bookAndQuantity.getBookId())));
+    }
 
     Book save(BookCommand bookCommand) {
         return bookRepository.save(toDocument(bookCommand));
@@ -33,6 +48,16 @@ class BookService {
                 }
         );
         return toCommand(bookById.orElseThrow());
+    }
+
+    private void tryReduceStock(Book book, Long quantity) {
+        if (book.getStock() < quantity) {
+            throw new InsufficientStockException(book.getId(), book.getStock(), quantity);
+        }
+
+        book.setStock(book.getStock() - quantity);
+        bookRepository.save(book);
+
     }
 
     private Book toDocument(BookCommand bookCommand) {
