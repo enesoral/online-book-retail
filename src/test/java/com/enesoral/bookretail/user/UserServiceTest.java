@@ -56,7 +56,7 @@ class UserServiceTest {
     }
 
     @Test
-    void save() {
+    void givenValidUserCommand_whenPerformSaving_thenReturnSuccessResponse() {
         lenient().when(userRepository.save(userRequest))
                 .thenReturn(userResponse);
 
@@ -71,7 +71,7 @@ class UserServiceTest {
     }
 
     @Test
-    void saveBAD() {
+    void givenValidUserCommand_whenEmailAlreadyExists_thenException() {
         lenient().when(userRepository.save(userRequest))
                 .thenReturn(userResponse);
 
@@ -80,12 +80,12 @@ class UserServiceTest {
         lenient().when(userRepository.existsByEmail(userRequest.getEmail()))
                 .thenReturn(true);
 
-        assertThrows(EmailAlreadyTakenException.class,
-                () -> userService.save(userCommand));
+        verify(userRepository, times(1)).existsByEmail(userRequest.getEmail());
+        assertThrows(EmailAlreadyTakenException.class, () -> userService.save(userCommand));
     }
 
     @Test
-    void isUserExist() {
+    void givenUserId_whenUserExist_thenReturnTrue() {
         lenient().when(userRepository.save(userRequest))
                 .thenReturn(userResponse);
 

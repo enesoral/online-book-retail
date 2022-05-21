@@ -77,7 +77,7 @@ class BookServiceTest {
     }
 
     @Test
-    void testSavingBookWithValidRequest() {
+    void givenValidBookCommand_whenPerformSaving_thenReturnSuccessResponse() {
         lenient().when(bookRepository.save(bookRequest))
                 .thenReturn(bookResponse);
 
@@ -94,7 +94,7 @@ class BookServiceTest {
     }
 
     @Test
-    void testUpdatingStockWithSavedBook() {
+    void givenValidUpdateCommand_whenUpdatingStock_thenReturnSuccessResponse() {
         lenient().when(bookRepository.findById(ID))
                 .thenReturn(Optional.of(bookResponse));
 
@@ -110,7 +110,7 @@ class BookServiceTest {
     }
 
     @Test
-    void testUpdatingStockWithNotSavedBook() {
+    void givenValidUpdateCommand_whenBookNotExist_thenException() {
         lenient().when(bookRepository.findById(ID))
                 .thenReturn(Optional.of(bookResponse));
 
