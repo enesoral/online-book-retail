@@ -47,6 +47,12 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId, PageRequest.of(page, 10));
     }
 
+    public Page<OrderCommand> getAllByDateInterval(DateInterval dateIntervalRequest, int page) {
+        return orderRepository.findAllByDateCreatedBetween(dateIntervalRequest.getStart(),
+                dateIntervalRequest.getEnd(),
+                PageRequest.of(page, 10));
+    }
+
     private OrderCommand toCommand(Order order) {
         return orderMapper.toCommand(order);
     }
