@@ -36,6 +36,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> save(@Valid @RequestBody UserCommand userCommand) {
-        return new ResponseEntity<>(userService.save(userCommand), HttpStatus.OK);
+        return new ResponseEntity<>(userService.save(userCommand), HttpStatus.CREATED);
     }
 }

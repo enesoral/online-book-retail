@@ -20,7 +20,7 @@ class BookController {
 
     @PostMapping
     public ResponseEntity<Book> save(@Valid @RequestBody BookCommand recordCommand) {
-        return new ResponseEntity<>(bookService.save(recordCommand), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.save(recordCommand), HttpStatus.CREATED);
     }
 
     @PutMapping("/stocks")
