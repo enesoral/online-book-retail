@@ -21,6 +21,7 @@ public class BookService {
     private final BookMapper bookMapper;
 
     @Transactional
+    @Retryable(maxAttempts = 10, value = OptimisticLockingFailureException.class)
     public BigDecimal getTotalPriceAndReduceStock(@Valid BookAndQuantity bookAndQuantity) {
         final Optional<Book> bookById = bookRepository.findById(bookAndQuantity.getBookId());
         return bookById.map(book -> {
