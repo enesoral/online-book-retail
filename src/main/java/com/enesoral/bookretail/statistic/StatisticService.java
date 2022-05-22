@@ -8,6 +8,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,11 +16,15 @@ class StatisticService {
 
     private final StatisticRepository statisticRepository;
 
+    public List<StatisticCommand> getStatisticsByUser(String userId) {
+        return statisticRepository.findAllByUserId(userId);
+    }
+
     @KafkaListener(topics = "${kafka.order-statistic-topic}",
             containerFactory = "kafkaListenerContainerFactory",
             autoStartup = "${kafka.enabled}")
     @Retryable(maxAttempts = 2, value = OptimisticLockingFailureException.class)
-    public void listenUserOrderStatisticTopic(OrderCommand order) {
+    void listenUserOrderStatisticTopic(OrderCommand order) {
         updateStatistics(order);
     }
 
