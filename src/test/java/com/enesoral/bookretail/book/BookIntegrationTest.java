@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,6 +20,7 @@ import static com.enesoral.bookretail.book.BookTestHelper.PRICE;
 import static com.enesoral.bookretail.book.BookTestHelper.STOCK;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@EmbeddedKafka
 @AutoConfigureDataMongo
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

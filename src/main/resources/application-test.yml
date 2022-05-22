@@ -1,7 +1,10 @@
 spring:
-  config:
-    activate:
-      on-profile: test
   mongodb:
     embedded:
       version: 3.5.5
+
+kafka:
+  enabled: false
+  bootstrap-address: ${spring.embedded.kafka.brokers:}
+  order-statistic-topic: user-order-statistics
+  group-id: book-retail
