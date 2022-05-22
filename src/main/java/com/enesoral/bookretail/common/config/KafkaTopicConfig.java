@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaTopicConfig {
+class KafkaTopicConfig {
 
     @Value("${kafka.bootstrap-address}")
     private String bootstrapAddress;

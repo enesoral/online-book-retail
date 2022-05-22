@@ -21,7 +21,7 @@ import java.util.Map;
 @ConditionalOnProperty("kafka.enabled")
 @EnableKafka
 @Configuration
-public class KafkaConsumerConfig {
+class KafkaConsumerConfig {
 
     @Value("${kafka.bootstrap-address}")
     private String bootstrapAddress;
