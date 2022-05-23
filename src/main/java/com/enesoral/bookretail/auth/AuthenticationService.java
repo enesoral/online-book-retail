@@ -35,6 +35,16 @@ public class AuthenticationService {
         this.expiryInMs = expiryInMs;
     }
 
+    public AuthenticationResponse authenticate(UserCommand user) {
+        final Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        final List<String> roles = authenticate.getAuthorities().stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+        final String token = jwtTokenProvider.createToken(user.getEmail(), roles);
+        return getAuthenticationResponse(user, token);
+    }
+
     public AuthenticationResponse refreshToken(RefreshTokenCommand refreshTokenCommand) {
         refreshTokenService.validateRefreshToken(refreshTokenCommand.getRefreshToken());
         final String token = jwtTokenProvider.generateTokenWithUserName(refreshTokenCommand.getEmail());
@@ -44,6 +54,15 @@ public class AuthenticationService {
                 .refreshToken(refreshTokenCommand.getRefreshToken())
                 .expiresAt(LocalDateTime.now().plusSeconds(expiryInMs / 1000))
                 .email(refreshTokenCommand.getEmail())
+                .build();
+    }
+
+    private AuthenticationResponse getAuthenticationResponse(UserCommand user, String token) {
+        return AuthenticationResponse.builder()
+                .email(user.getEmail())
+                .authenticationToken(token)
+                .expiresAt(LocalDateTime.now().plusSeconds(expiryInMs / 1000))
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .build();
     }
 
