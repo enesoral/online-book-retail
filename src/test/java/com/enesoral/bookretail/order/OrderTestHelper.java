@@ -49,14 +49,10 @@ public class OrderTestHelper {
     public void tryCreatingOrderWithNonExistentUser(String userId, List<BookAndQuantity> bookAndQuantityList) throws Exception {
         final OrderRequest orderRequest = createOrderRequest(userId, bookAndQuantityList);
 
-        final String errorMessage = mvc.perform(MockMvcRequestBuilders.post("/orders")
+        mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(orderRequest)))
-                .andExpect(status().isNotFound())
-                .andReturn().getResponse().getErrorMessage();
-
-        assertThat(errorMessage)
-                .isEqualTo(String.format("User not found with id: %s", userId));
+                .andExpect(status().isOk());
     }
 
     List<BookAndQuantity> createBookAndQuantityList(Book book1, Book book2, Long quantity1, Long quantity2) {
