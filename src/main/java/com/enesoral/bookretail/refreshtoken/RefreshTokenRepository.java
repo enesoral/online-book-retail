@@ -1,4 +1,4 @@
-package com.enesoral.bookretail.tokenrefresh;
+package com.enesoral.bookretail.refreshtoken;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

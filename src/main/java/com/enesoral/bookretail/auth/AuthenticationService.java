@@ -1,8 +1,8 @@
 package com.enesoral.bookretail.auth;
 
 import com.enesoral.bookretail.jwt.JwtTokenProvider;
-import com.enesoral.bookretail.tokenrefresh.RefreshTokenCommand;
-import com.enesoral.bookretail.tokenrefresh.RefreshTokenService;
+import com.enesoral.bookretail.refreshtoken.RefreshTokenCommand;
+import com.enesoral.bookretail.refreshtoken.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

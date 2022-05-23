@@ -1,6 +1,6 @@
 package com.enesoral.bookretail.auth;
 
-import com.enesoral.bookretail.tokenrefresh.RefreshTokenCommand;
+import com.enesoral.bookretail.refreshtoken.RefreshTokenCommand;
 import com.enesoral.bookretail.user.User;
 import com.enesoral.bookretail.user.UserCommand;
 import com.enesoral.bookretail.user.UserService;

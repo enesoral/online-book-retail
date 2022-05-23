@@ -1,4 +1,4 @@
-package com.enesoral.bookretail.tokenrefresh;
+package com.enesoral.bookretail.refreshtoken;
 
 import com.enesoral.bookretail.common.exception.RefreshTokenNotFoundException;
 import lombok.RequiredArgsConstructor;

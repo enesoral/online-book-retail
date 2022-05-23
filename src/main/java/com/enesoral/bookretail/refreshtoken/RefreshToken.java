@@ -1,4 +1,4 @@
-package com.enesoral.bookretail.tokenrefresh;
+package com.enesoral.bookretail.refreshtoken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
