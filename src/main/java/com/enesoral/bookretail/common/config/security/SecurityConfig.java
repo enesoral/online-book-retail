@@ -22,6 +22,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private static final String[] SWAGGER_AUTH_WHITELIST = {
+			"/v3/api-docs/**",
+			"/swagger-ui/**"
+	};
+
 	private final JwtTokenProvider jwtTokenProvider;
 
 	private final UserDetailsService userDetailsService;
@@ -35,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeRequests()
+				.antMatchers(SWAGGER_AUTH_WHITELIST).permitAll()
 				.antMatchers(HttpMethod.POST, "/authentication/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
