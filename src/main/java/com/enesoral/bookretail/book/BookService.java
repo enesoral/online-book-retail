@@ -22,6 +22,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
+    // MongoDB 4.0+ supports transactions over a replica set
     @Transactional
     @Retryable(maxAttempts = 10, value = OptimisticLockingFailureException.class)
     public BigDecimal getTotalPriceAndReduceStock(@Valid BookAndQuantity bookAndQuantity) {

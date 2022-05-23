@@ -17,6 +17,7 @@ public class UserDetailsService implements org.springframework.security.core.use
 
 	private final UserRepository userRepository;
 
+	// MongoDB 4.0+ supports transactions over a replica set
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

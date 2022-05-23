@@ -44,6 +44,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
+    // MongoDB 4.0+ supports transactions over a replica set
     @Transactional
     public OrderCommand processOrder(OrderRequest orderRequest) {
         if (!userService.isUserExist(orderRequest.getUserId())) {
