@@ -4,6 +4,7 @@ import com.enesoral.bookretail.book.BookService;
 import com.enesoral.bookretail.common.exception.OrderNotFoundException;
 import com.enesoral.bookretail.common.exception.UserNotFoundException;
 import com.enesoral.bookretail.user.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class OrderService {
 
     private final UserService userService;
@@ -54,7 +56,9 @@ public class OrderService {
             totalPrice = totalPrice.add(price);
         }
 
-        final OrderCommand orderCommand = toCommand(orderRepository.save(Order.generate(orderRequest, totalPrice)));
+        final Order savedOrder = orderRepository.save(Order.generate(orderRequest, totalPrice));
+        log.info("Order({}) saved for User({})", savedOrder.getId(), savedOrder.getUserId());
+        final OrderCommand orderCommand = toCommand(savedOrder);
         orderCommandKafkaTemplate.send(userOrderStatisticTopic, orderCommand);
         return orderCommand;
     }

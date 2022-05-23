@@ -4,6 +4,7 @@ import com.enesoral.bookretail.common.exception.BookNotFoundException;
 import com.enesoral.bookretail.common.exception.InsufficientStockException;
 import com.enesoral.bookretail.order.BookAndQuantity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
 
     private final BookRepository bookRepository;
@@ -41,6 +43,7 @@ public class BookService {
         final Optional<Book> bookById = bookRepository.findById(stockUpdateCommand.getBookId());
         bookById.ifPresentOrElse(
                 book -> {
+                    log.info("Book({}) stock will be set to {}", book.getId(), stockUpdateCommand.getNewStock());
                     book.setStock(stockUpdateCommand.getNewStock());
                     bookRepository.save(book);
                 },
@@ -57,6 +60,7 @@ public class BookService {
             throw new InsufficientStockException(book.getId(), book.getStock(), quantity);
         }
 
+        log.info("Book({}) stock will be reduced by {}", book.getId(), quantity);
         book.setStock(book.getStock() - quantity);
         bookRepository.save(book);
 

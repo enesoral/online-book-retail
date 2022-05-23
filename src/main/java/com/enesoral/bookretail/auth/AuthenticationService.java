@@ -3,6 +3,7 @@ package com.enesoral.bookretail.auth;
 import com.enesoral.bookretail.jwt.JwtTokenProvider;
 import com.enesoral.bookretail.refreshtoken.RefreshTokenCommand;
 import com.enesoral.bookretail.refreshtoken.RefreshTokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AuthenticationService {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -37,6 +39,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         final Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        log.info("User({}) will be authenticated", request.getEmail());
         final List<String> roles = authenticate.getAuthorities().stream()
                 .map(Object::toString)
                 .collect(Collectors.toList());
@@ -46,6 +49,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse refreshToken(RefreshTokenCommand refreshTokenCommand) {
         refreshTokenService.validateRefreshToken(refreshTokenCommand.getRefreshToken());
+        log.info("Token({}) will be refreshed", refreshTokenCommand.getRefreshToken());
         final String token = jwtTokenProvider.generateTokenWithUserName(refreshTokenCommand.getEmail());
         refreshTokenService.deleteRefreshToken(refreshTokenCommand.getRefreshToken());
         return AuthenticationResponse.builder()
