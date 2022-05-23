@@ -42,7 +42,7 @@ public class UserTestHelper {
 
         return objectMapper.readValue(
                 mvc.perform(
-                        MockMvcRequestBuilders.post("/users")
+                        MockMvcRequestBuilders.post("/authentication/sign-up")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(new ObjectMapper().writeValueAsString(newUser))
                         )
