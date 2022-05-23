@@ -3,7 +3,6 @@ package com.enesoral.bookretail.auth;
 import com.enesoral.bookretail.jwt.JwtTokenProvider;
 import com.enesoral.bookretail.tokenrefresh.RefreshTokenCommand;
 import com.enesoral.bookretail.tokenrefresh.RefreshTokenService;
-import com.enesoral.bookretail.user.UserCommand;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,14 +34,14 @@ public class AuthenticationService {
         this.expiryInMs = expiryInMs;
     }
 
-    public AuthenticationResponse authenticate(UserCommand user) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
         final Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         final List<String> roles = authenticate.getAuthorities().stream()
                 .map(Object::toString)
                 .collect(Collectors.toList());
-        final String token = jwtTokenProvider.createToken(user.getEmail(), roles);
-        return getAuthenticationResponse(user, token);
+        final String token = jwtTokenProvider.createToken(request.getEmail(), roles);
+        return generateAuthenticationResponse(request, token);
     }
 
     public AuthenticationResponse refreshToken(RefreshTokenCommand refreshTokenCommand) {
@@ -57,9 +56,9 @@ public class AuthenticationService {
                 .build();
     }
 
-    private AuthenticationResponse getAuthenticationResponse(UserCommand user, String token) {
+    private AuthenticationResponse generateAuthenticationResponse(AuthenticationRequest request, String token) {
         return AuthenticationResponse.builder()
-                .email(user.getEmail())
+                .email(request.getEmail())
                 .authenticationToken(token)
                 .expiresAt(LocalDateTime.now().plusSeconds(expiryInMs / 1000))
                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())

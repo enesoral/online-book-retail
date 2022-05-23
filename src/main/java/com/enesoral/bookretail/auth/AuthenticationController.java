@@ -28,8 +28,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/sign-in")
-    public AuthenticationResponse signIn(@Valid @RequestBody UserCommand user) {
-        return authenticationService.authenticate(user);
+    public AuthenticationResponse signIn(@Valid @RequestBody AuthenticationRequest request) {
+        return authenticationService.authenticate(request);
     }
 
     @PostMapping("/refresh-token")
