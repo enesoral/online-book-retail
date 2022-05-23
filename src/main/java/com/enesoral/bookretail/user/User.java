@@ -1,5 +1,6 @@
 package com.enesoral.bookretail.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,6 +18,9 @@ public class User {
 
     @Id
     private String id;
+
+    @JsonIgnore
+    private String password;
 
     private String fullName;
 

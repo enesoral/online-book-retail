@@ -20,4 +20,7 @@ public class UserCommand {
     @NotBlank
     @Email
     private String email;
+
+    @NotBlank
+    private String password;
 }

@@ -9,13 +9,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.enesoral.bookretail.user.UserTestHelper.EMAIL;
 import static com.enesoral.bookretail.user.UserTestHelper.FULL_NAME;
 import static com.enesoral.bookretail.user.UserTestHelper.ID;
+import static com.enesoral.bookretail.user.UserTestHelper.PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,6 +32,9 @@ class UserServiceTest {
 
     @Spy
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+
+    @Mock
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Mock
     private UserRepository userRepository;
@@ -47,6 +53,7 @@ class UserServiceTest {
         userRequest = User.builder()
                 .fullName(FULL_NAME)
                 .email(EMAIL)
+                .password(PASSWORD)
                 .build();
 
         userCommand = userMapper.toCommand(userResponse);
@@ -54,12 +61,12 @@ class UserServiceTest {
 
     @Test
     void givenValidUserCommand_whenPerformSaving_thenReturnSuccessResponse() {
-        lenient().when(userRepository.save(userRequest))
+        lenient().when(userRepository.save(any(User.class)))
                 .thenReturn(userResponse);
 
         final User savedUser = userService.save(userCommand);
 
-        verify(userRepository, times(1)).save(userRequest);
+        verify(userRepository, times(1)).save(any(User.class));
         assertThat(savedUser)
                 .isNotNull()
                 .matches(user -> user.getId().equals(userResponse.getId()))
@@ -83,7 +90,7 @@ class UserServiceTest {
 
     @Test
     void givenUserId_whenUserExist_thenReturnTrue() {
-        lenient().when(userRepository.save(userRequest))
+        lenient().when(userRepository.save(any(User.class)))
                 .thenReturn(userResponse);
 
         final User savedUser = userService.save(userCommand);

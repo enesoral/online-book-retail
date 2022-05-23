@@ -19,6 +19,7 @@ public class UserTestHelper {
     public static final String FULL_NAME_2 = "Ali Şen";
     public static final String EMAIL = "abc@gmail.com";
     public static final String EMAIL_2 = "xyz@gmail.com";
+    public static final String PASSWORD = "strongpassword";
 
     private final WebApplicationContext applicationContext;
 
@@ -36,6 +37,7 @@ public class UserTestHelper {
         final UserCommand newUser = UserCommand.builder()
                 .fullName(fullName)
                 .email(email)
+                .password(PASSWORD)
                 .build();
 
         return objectMapper.readValue(
