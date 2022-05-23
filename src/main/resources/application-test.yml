@@ -8,3 +8,7 @@ kafka:
   bootstrap-address: ${spring.embedded.kafka.brokers:}
   order-statistic-topic: user-order-statistics
   group-id: book-retail
+
+jwt:
+  secretKey: {JWT_SECRETKEY}
+  expiryInMs: {JWT_EXPIRYINMS:3600000}

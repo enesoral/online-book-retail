@@ -9,3 +9,7 @@ kafka:
   bootstrap-address: kafka:29092
   order-statistic-topic: user-order-statistics
   group-id: book-retail
+
+jwt:
+  secretKey: {JWT_SECRETKEY}
+  expiryInMs: {JWT_EXPIRYINMS}
