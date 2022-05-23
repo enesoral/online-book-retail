@@ -1,4 +1,4 @@
-package com.enesoral.bookretail.common.config;
+package com.enesoral.bookretail.common.config.kafka;
 
 import com.enesoral.bookretail.order.OrderCommand;
 import org.apache.kafka.clients.producer.ProducerConfig;

@@ -1,4 +1,4 @@
-package com.enesoral.bookretail.common.config;
+package com.enesoral.bookretail.common.config.kafka;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
